@@ -119,21 +119,3 @@ export class Remote{
     }
 
 }
-
-const light = new Light();
-const turnOnCommand = new TurnOnCommand(light);
-const turnOffCommand = new TurnOffCommand(light);
-const remote = new Remote;
-
-const redLight = new Red();
-const turRedLightOn = new TurnOnRedLight(redLight);
-const increaseRedLight = new IncreaseRedLight(redLight);
-
-remote.setCommand(turnOnCommand)
-remote.executeCommand()
-remote.setCommand(turnOffCommand)
-remote.executeCommand()
-remote.setCommand(turRedLightOn)
-remote.executeCommand()
-remote.setCommand(increaseRedLight)
-remote.executeCommand()

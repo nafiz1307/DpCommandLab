@@ -11,42 +11,50 @@ import {
   Remote,
 } from "./Light";
 
-const remote = new Remote();
-const light = new Light();
-const redLight = new Red();
-const turnOnCommand = new TurnOnCommand(light);
-const turnOffCommand = new TurnOffCommand(light);
-const turRedLightOn = new TurnOnRedLight(redLight);
-const turnOffRedLight = new TurnOffRedLight(redLight);
-const increaseRedLight = new IncreaseRedLight(redLight);
-const decreaseRedLight = new DecreaseRedLight(redLight);
-
-let redLightFlag = false;
+let redLightIndicator: boolean = false
 
 
+export function commandOnReciever(command: Command): string {
 
-let lightController=(command : string)=>{
-    if(command=='on'){
-        remote.setCommand(turnOnCommand)
-        remote.executeCommand()
-    }
-    else if(command=='off'){
-        remote.setCommand(turnOffCommand)
-        remote.executeCommand()
-    }
+    const remote = new Remote();
+    remote.setCommand(command)
 
-    else if(command=='red-light-on'){
-        redLightFlag = true;
-        remote.setCommand(turRedLightOn)
-        remote.executeCommand()
+    return remote.executeCommand()
+
+}
+
+export function orderHandler(command: string): string {
+
+    let result: string;
+
+    switch (command) {
+        case "on":
+            result = redLightIndicator ? commandOnReciever(new TurnOnRedLight(new Red())) : commandOnReciever(new TurnOffRedLight(new Light()))
+            break;
+
+        case "off":
+            redLightIndicator=false
+            result = redLightIndicator ? commandOnReciever(new TurnOffRedLight(new Red())) : commandOnReciever(new TurnOffRedLight(new Light()))
+            break
+
+        case "increase":
+            result=redLightIndicator?commandOnReciever(new IncreaseRedLight(new Red())):commandOnReciever(new TurnOffRedLight(new Light()))
+
+            break
+
+        case "decrease":
+            console.log("decrease")
+            result =redLightIndicator?commandOnReciever(new DecreaseRedLight(new Red())) : commandOnReciever(new TurnOffRedLight(new Light()))
+            break
+
+        case "red":
+            redLightIndicator = true
+            result=redLightIndicator?commandOnReciever(new TurnOnRedLight(new Red())):commandOnReciever(new TurnOffRedLight(new Light()))
+            break
+        default:
+
     }
-    else if(command=='increase' && redLightFlag){
-        remote.setCommand(increaseRedLight)
-        remote.executeCommand()
-    }
-    else if(command=='decrease' && redLightFlag){
-        remote.setCommand(decreaseRedLight)
-        remote.executeCommand()
-    }
+    // @ts-ignore
+    return result;
 
 }
