@@ -92,7 +92,7 @@ export class IncreaseRedLight implements Command{
     }
 }
 
-export class decreaseRedLight implements Command{
+export class DecreaseRedLight implements Command{
     light : Red;
 
     constructor(light : Red){
